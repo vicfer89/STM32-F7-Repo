@@ -102,6 +102,12 @@ int main(void)
   /* USER CODE BEGIN 2 */
   udp_echoclient_connect();
   udp_echoserver_init();
+
+  uint8_t cadena_init[] = "Sistema inicializado...\r\n";
+  uint16_t len_cadena_init = strlen((const char*)cadena_init);
+  while(HAL_UART_GetState(&huart3) != HAL_UART_STATE_READY){}
+  HAL_UART_Transmit_DMA(&huart3,(uint8_t *) cadena_init,len_cadena_init);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -112,7 +118,7 @@ int main(void)
 	  {
 		uint8_t cadena[] = "Boton pulsado UART\r\n";
 		uint16_t len_cadena = strlen((const char*)cadena);
-		HAL_UART_Transmit(&huart3,cadena,len_cadena,100);
+		HAL_UART_Transmit_DMA(&huart3,(uint8_t *) cadena,len_cadena);
 		udp_echoclient_send();
 		HAL_Delay(1);
 		flag_Button = 0;
