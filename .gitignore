@@ -1,3 +1,4 @@
 # Ficheros a ignorar para STM32
 .metadata/
 Debug/
+.settings/
