@@ -51,6 +51,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "udp_echoserver.h"
+#include "usart.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -111,6 +112,9 @@ void udp_echoserver_receive_callback(void *arg, struct udp_pcb *upcb, struct pbu
     
   /* Tell the client that we have accepted it */
   udp_send(upcb, p);
+
+  /* Enviamos Payload por puerto serie */
+  HAL_UART_Transmit_DMA(&huart3,(uint8_t *) p->payload,p->len);
 
   /* free the UDP connection, so we can accept new clients */
   udp_disconnect(upcb);

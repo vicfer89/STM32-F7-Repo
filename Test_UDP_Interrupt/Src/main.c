@@ -100,8 +100,8 @@ int main(void)
   MX_TIM13_Init();
   MX_TIM14_Init();
   /* USER CODE BEGIN 2 */
-  udp_echoclient_connect();
-  udp_echoserver_init();
+  udp_echoclient_connect(); // Comunicacion PLACA -> ORDENADOR en un solo sentido
+  udp_echoserver_init(); // Comunicacion BIDIRECCIONAL PLACA <-> ORDENADOR en dos sentidos
 
   uint8_t cadena_init[] = "Sistema inicializado...\r\n";
   uint16_t len_cadena_init = strlen((const char*)cadena_init);

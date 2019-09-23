@@ -82,7 +82,7 @@ void udp_echoclient_connect(void)
   if (upcb!=NULL)
   {
     /*assign destination IP address */
-    IP4_ADDR( &DestIPaddr, 192, 168, 0, 20 );
+    IP4_ADDR( &DestIPaddr, 192, 168, 0, 29 ); // Cambiar a IP de ordenador para que funcione
     
     /* configure destination IP address and port */
     err= udp_connect(upcb, &DestIPaddr, 49000);
