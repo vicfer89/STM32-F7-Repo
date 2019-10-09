@@ -82,7 +82,7 @@ void udp_echoclient_connect(void)
   if (upcb!=NULL)
   {
     /*assign destination IP address */
-    IP4_ADDR( &DestIPaddr, 192, 168, 0, 29 ); // Cambiar a IP de ordenador para que funcione
+    IP4_ADDR( &DestIPaddr, 192, 168, 0, 20 ); // Cambiar a IP de ordenador para que funcione
     
     /* configure destination IP address and port */
     err= udp_connect(upcb, &DestIPaddr, 49000);
@@ -107,6 +107,7 @@ void udp_echoclient_connect(void)
 void udp_echoclient_send(void)
 {
   struct pbuf *p;
+  ip_addr_t DestIPaddr;
   
   sprintf((char*)data, "sending udp client message %d \r\n", (int)message_count);
   
@@ -117,9 +118,19 @@ void udp_echoclient_send(void)
   {
     /* copy data to pbuf */
     pbuf_take(p, (char*)data, strlen((char*)data));
+
+	/*assign destination IP address */
+	IP4_ADDR( &DestIPaddr, 192, 168, 0, 20 ); // Cambiar a IP de ordenador para que funcione
+
+	/* configure destination IP address and port */
+	upcb->local_port = 49001;
+	udp_connect(upcb, &DestIPaddr, 49000);
     
     /* send udp data */
-    udp_send(upcb, p); 
+    udp_send(upcb, p);
+
+    /* free the UDP connection, so we can accept new clients */
+    udp_disconnect(upcb);
     
     /* free pbuf */
     pbuf_free(p);

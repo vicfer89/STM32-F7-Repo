@@ -32,6 +32,9 @@
 #include "string.h"
 #include "udp_echoserver.h"
 #include "udp_echoclient.h"
+
+#include  <errno.h>
+#include  <sys/unistd.h> // STDOUT_FILENO, STDERR_FILENO
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -107,7 +110,6 @@ int main(void)
   uint16_t len_cadena_init = strlen((const char*)cadena_init);
   while(HAL_UART_GetState(&huart3) != HAL_UART_STATE_READY){}
   HAL_UART_Transmit_DMA(&huart3,(uint8_t *) cadena_init,len_cadena_init);
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -160,6 +162,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLN = 216;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 3;
+
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();

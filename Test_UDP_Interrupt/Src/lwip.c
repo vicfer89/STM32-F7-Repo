@@ -25,7 +25,7 @@
 #include "lwip/sio.h"
 #endif /* MDK ARM Compiler */
 #include "ethernetif.h"
-
+#include "usart.h"
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
@@ -37,7 +37,8 @@ void Error_Handler(void);
 uint32_t DHCPfineTimer = 0;
 uint32_t DHCPcoarseTimer = 0;
 /* USER CODE BEGIN 1 */
-
+__IO uint8_t DHCP_state = DHCP_OFF;
+__IO uint8_t IpSet = 0;
 /* USER CODE END 1 */
 
 /* Variables Initialization */
@@ -47,6 +48,37 @@ ip4_addr_t netmask;
 ip4_addr_t gw;
 
 /* USER CODE BEGIN 2 */
+/* Private functions ---------------------------------------------------------*/
+/**
+  * @brief  Notify the User about the nework interface config status
+  * @param  netif: the network interface
+  * @retval None
+  */
+void User_notification(struct netif *netif)
+{
+/*  if (netif_is_up(netif))
+ {
+#ifdef USE_DHCP
+    // Update DHCP state machine
+    DHCP_state = DHCP_START;
+    uint8_t iptxt[] = "DHCP Activado \r\n";
+    HAL_UART_Transmit_DMA(&huart3,(uint8_t *) iptxt, sizeof(iptxt));
+#else
+    uint8_t iptxt[20];
+    sprintf((char *)iptxt, "%s", ip4addr_ntoa((const ip4_addr_t *)&netif->ip_addr));
+    HAL_UART_Transmit_DMA(&huart3,(uint8_t *) iptxt, sizeof(iptxt));
+#endif // USE_DHCP
+ }
+ else
+  {
+#ifdef USE_DHCP
+    // Update DHCP state machine
+    DHCP_state = DHCP_LINK_DOWN;
+    uint8_t iptxt[] = "El cable de red está desconectado\r\n";
+    HAL_UART_Transmit_DMA(&huart3,(uint8_t *) iptxt, sizeof(iptxt));
+#endif
+  }*/
+}
 
 /* USER CODE END 2 */
 
@@ -87,7 +119,6 @@ void MX_LWIP_Init(void)
 
   /* Start DHCP negotiation for a network interface (IPv4) */
   dhcp_start(&gnetif);
-
 /* USER CODE BEGIN 3 */
 
 /* USER CODE END 3 */
@@ -123,6 +154,14 @@ void MX_LWIP_Process(void)
   sys_check_timeouts();
 
 /* USER CODE BEGIN 4_3 */
+  if(dhcp_supplied_address(&gnetif) && IpSet == 0)
+  {
+	  IpSet = 1;
+	  uint8_t iptxt[256];
+	  sprintf((char *)iptxt, "Conexion establecida con router, IP de conexion: %s \r\n", ip4addr_ntoa((const ip4_addr_t *) &gnetif.ip_addr));
+	  HAL_UART_Transmit_DMA(&huart3,(uint8_t *) iptxt, strlen(iptxt));
+
+  }
 /* USER CODE END 4_3 */
 }
 

@@ -40,7 +40,13 @@
 #endif /* WITH_RTOS */
 
 /* USER CODE BEGIN 0 */
-
+ /* DHCP process states */
+ #define DHCP_OFF                   (uint8_t) 0
+ #define DHCP_START                 (uint8_t) 1
+ #define DHCP_WAIT_ADDRESS          (uint8_t) 2
+ #define DHCP_ADDRESS_ASSIGNED      (uint8_t) 3
+ #define DHCP_TIMEOUT               (uint8_t) 4
+ #define DHCP_LINK_DOWN             (uint8_t) 5
 /* USER CODE END 0 */
 
 /* Global Variables ----------------------------------------------------------*/
@@ -51,6 +57,13 @@ void MX_LWIP_Init(void);
 
 #if !WITH_RTOS
 /* USER CODE BEGIN 1 */
+/* Private functions ---------------------------------------------------------*/
+/**
+  * @brief  Notify the User about the nework interface config status
+  * @param  netif: the network interface
+  * @retval None
+  */
+void User_notification(struct netif *netif);
 /* Function defined in lwip.c to:
  *   - Read a received packet from the Ethernet buffers 
  *   - Send it to the lwIP stack for handling
