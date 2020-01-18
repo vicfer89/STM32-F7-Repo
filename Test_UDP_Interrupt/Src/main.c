@@ -122,7 +122,7 @@ int main(void)
 		uint16_t len_cadena = strlen((const char*)cadena);
 		HAL_UART_Transmit_DMA(&huart3,(uint8_t *) cadena,len_cadena);
 		udp_echoclient_send();
-		HAL_Delay(1);
+		HAL_Delay(100);
 		flag_Button = 0;
 	  }
 

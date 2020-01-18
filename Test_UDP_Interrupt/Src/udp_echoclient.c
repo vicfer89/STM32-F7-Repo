@@ -120,10 +120,11 @@ void udp_echoclient_send(void)
     pbuf_take(p, (char*)data, strlen((char*)data));
 
 	/*assign destination IP address */
-	IP4_ADDR( &DestIPaddr, 192, 168, 0, 20 ); // Cambiar a IP de ordenador para que funcione
+	IP4_ADDR( &DestIPaddr, 192, 168, 0, 2 ); // Cambiar a IP de ordenador para que funcione
 
 	/* configure destination IP address and port */
-	upcb->local_port = 49001;
+	upcb->local_port = 49001; // Puerto de origen de paquete
+	//upcb->ttl = 1; // Cambiado tiempo de vida a 1 para punto a punto. CAMBIAR SI ROUTER
 	udp_connect(upcb, &DestIPaddr, 49000);
     
     /* send udp data */
