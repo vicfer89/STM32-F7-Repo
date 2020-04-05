@@ -110,6 +110,7 @@ int main(void)
   uint16_t len_cadena_init = strlen((const char*)cadena_init);
   while(HAL_UART_GetState(&huart3) != HAL_UART_STATE_READY){}
   HAL_UART_Transmit_DMA(&huart3,(uint8_t *) cadena_init,len_cadena_init);
+  HAL_GPIO_WritePin(GPIOB, LD1_Pin|LD3_Pin|LD2_Pin, GPIO_PIN_SET); // Ponemos a SET el pin LD1, LD2 y LD3
   /* USER CODE END 2 */
 
   /* Infinite loop */
