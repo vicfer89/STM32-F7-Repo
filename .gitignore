@@ -3,3 +3,5 @@
 Debug/
 .settings/
 RemoteSystemsTempFiles/
+TestsSTM32_Dissambler/
+Test_UDP_Interrupt/Release/
