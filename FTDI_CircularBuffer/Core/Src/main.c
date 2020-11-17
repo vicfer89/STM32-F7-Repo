@@ -25,12 +25,13 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <string.h>
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+int __io_putchar(int ch);
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -91,7 +92,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  printf("Sistema iniciado...\r\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -163,7 +164,11 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+int __io_putchar(int ch)
+{
+	HAL_UART_Transmit(&huart2, (uint8_t *) &ch, 1, HAL_MAX_DELAY);
+	return 0;
+}
 /* USER CODE END 4 */
 
 /**
