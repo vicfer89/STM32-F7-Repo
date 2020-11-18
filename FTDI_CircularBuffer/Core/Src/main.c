@@ -166,7 +166,8 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 int __io_putchar(int ch)
 {
-	HAL_UART_Transmit(&huart2, (uint8_t *) &ch, 1, HAL_MAX_DELAY);
+	while(HAL_UART_GetState(&huart2) == HAL_UART_STATE_BUSY_TX){}
+	HAL_UART_Transmit_IT(&huart2, (uint8_t *) &ch, 1);
 	return 0;
 }
 /* USER CODE END 4 */
