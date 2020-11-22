@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
 #include "rtc.h"
 #include "usart.h"
 #include "gpio.h"
@@ -57,7 +58,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+uint8_t UART2_rxBuffer[12] = {0};
 /* USER CODE END 0 */
 
 /**
@@ -88,11 +89,14 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_RTC_Init();
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   printf("Sistema iniciado...\r\n");
+
+  HAL_UART_Receive_DMA(&huart2, UART2_rxBuffer, 12);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -169,6 +173,12 @@ int __io_putchar(int ch)
 	while(HAL_UART_GetState(&huart2) == HAL_UART_STATE_BUSY_TX){}
 	HAL_UART_Transmit_IT(&huart2, (uint8_t *) &ch, 1);
 	return 0;
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+    HAL_UART_Transmit(&huart2, UART2_rxBuffer, 12, 100);
+    HAL_UART_Receive_DMA(&huart2, UART2_rxBuffer, 12);
 }
 /* USER CODE END 4 */
 
