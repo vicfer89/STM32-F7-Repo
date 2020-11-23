@@ -95,6 +95,8 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   printf("Sistema iniciado...\r\n");
+  char print[] = "Hola mundo \r\n";
+  HAL_UART_Transmit(&huart2, (uint8_t* )print, sizeof(print), 100);
 
   HAL_UART_Receive_DMA(&huart2, UART2_rxBuffer, 12);
   /* USER CODE END 2 */
@@ -103,8 +105,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  HAL_UART_Transmit(&huart2, UART2_rxBuffer, 12, 10);
+	  HAL_Delay(500);
     /* USER CODE END WHILE */
-
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -180,6 +183,18 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     HAL_UART_Transmit(&huart2, UART2_rxBuffer, 12, 100);
     HAL_UART_Receive_DMA(&huart2, UART2_rxBuffer, 12);
 }
+
+void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
+{
+	if(huart == &huart2)
+	{
+		char message[] = "Fallo en transmision de UART2";
+		HAL_UART_Transmit(&huart2, (uint8_t *) message, sizeof(message), 100);
+	}
+
+    HAL_UART_Receive_DMA(huart, UART2_rxBuffer, 12);
+}
+
 /* USER CODE END 4 */
 
 /**
