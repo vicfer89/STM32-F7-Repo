@@ -105,7 +105,11 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  HAL_UART_Transmit(&huart2, UART2_rxBuffer, 12, 10);
+	  char cadena[128];
+	  uint32_t free_buff = huart2.hdmarx->Instance->CNDTR;
+	  uint32_t Head = 12 - free_buff;
+	  sprintf(cadena, "Content: %s \t\t Head: %d \t\t Restantes: %d \r\n", UART2_rxBuffer, Head, free_buff);
+	  HAL_UART_Transmit(&huart2, (uint8_t*) cadena, strlen(cadena),100);
 	  HAL_Delay(500);
     /* USER CODE END WHILE */
     /* USER CODE BEGIN 3 */
@@ -177,13 +181,14 @@ int __io_putchar(int ch)
 	HAL_UART_Transmit_IT(&huart2, (uint8_t *) &ch, 1);
 	return 0;
 }
-
+/*
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
     HAL_UART_Transmit(&huart2, UART2_rxBuffer, 12, 100);
     HAL_UART_Receive_DMA(&huart2, UART2_rxBuffer, 12);
-}
+}*/
 
+/*
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 {
 	if(huart == &huart2)
@@ -193,7 +198,7 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 	}
 
     HAL_UART_Receive_DMA(huart, UART2_rxBuffer, 12);
-}
+}*/
 
 /* USER CODE END 4 */
 
