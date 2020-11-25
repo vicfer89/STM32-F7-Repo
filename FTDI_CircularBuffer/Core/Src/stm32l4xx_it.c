@@ -47,7 +47,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
-
+void HAL_UART_Idle_IRQHandler(UART_HandleTypeDef * huart);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -295,11 +295,21 @@ void USART2_IRQHandler(void)
   /* USER CODE END USART2_IRQn 0 */
   HAL_UART_IRQHandler(&huart2);
   /* USER CODE BEGIN USART2_IRQn 1 */
-
+  HAL_UART_Idle_IRQHandler(&huart2);
   /* USER CODE END USART2_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
-
+void HAL_UART_Idle_IRQHandler(UART_HandleTypeDef * huart)
+{
+	if(USART2 == huart2.Instance) //Determine whether it is serial port 1
+	{
+		if(RESET != __HAL_UART_GET_FLAG(&huart2, UART_FLAG_IDLE)) //Judging whether it is idle interruption
+		{
+			__HAL_UART_CLEAR_IDLEFLAG(&huart2); //Clear idle interrupt sign (otherwise it will continue to enter interrupt)
+			HAL_UART_RxCpltCallback(huart); //Call interrupt handler
+		}
+	}
+}
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
