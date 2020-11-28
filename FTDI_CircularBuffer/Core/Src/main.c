@@ -32,11 +32,11 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-int __io_putchar(int ch);
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define UART2_DMA_BUFFER_LEN 12
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -51,6 +51,7 @@ int __io_putchar(int ch);
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
+int __io_putchar(int ch);
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 
@@ -58,7 +59,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint8_t UART2_rxBuffer[12] = {0};
+uint8_t UART2_rxBuffer[UART2_DMA_BUFFER_LEN] = {0};
 /* USER CODE END 0 */
 
 /**
@@ -68,7 +69,7 @@ uint8_t UART2_rxBuffer[12] = {0};
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	int posOutBuffer = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -98,18 +99,25 @@ int main(void)
   char print[] = "Hola mundo \r\n";
   HAL_UART_Transmit(&huart2, (uint8_t* )print, sizeof(print), 100);
 
-  HAL_UART_Receive_DMA(&huart2, UART2_rxBuffer, 12);
+  HAL_UART_Receive_DMA(&huart2, UART2_rxBuffer, UART2_DMA_BUFFER_LEN);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  char cadena[128];
-	  uint32_t free_buff = huart2.hdmarx->Instance->CNDTR;
-	  uint32_t Head = 12 - free_buff;
-	  sprintf(cadena, "Content: %s \t\t Head: %d \t\t Restantes: %d \r\n", UART2_rxBuffer, Head, free_buff);
-	  HAL_UART_Transmit(&huart2, (uint8_t*) cadena, strlen(cadena),100);
+	  //char cadena[128];
+	  uint32_t Head = UART2_DMA_BUFFER_LEN - huart2.hdmarx->Instance->CNDTR;
+	  while(Head != posOutBuffer)
+	  {
+		  //sprintf(cadena, "Content: %s \t\t Head: %lu \t\t Restantes: %lu \r\n", UART2_rxBuffer, Head, huart2.hdmarx->Instance->CNDTR);
+		  HAL_UART_Transmit(&huart2, &UART2_rxBuffer[posOutBuffer++], 1, 100);
+		  //posOutBuffer += strlen(cadena);
+		  if(posOutBuffer == UART2_DMA_BUFFER_LEN)
+		  {
+			  posOutBuffer = 0;
+		  }
+	  }
 	  HAL_Delay(500);
     /* USER CODE END WHILE */
     /* USER CODE BEGIN 3 */
