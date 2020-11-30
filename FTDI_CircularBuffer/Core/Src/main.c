@@ -180,9 +180,15 @@ int __io_putchar(int ch)
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	char cadena[128];
+	char clear_screen[] = {'\f', '\e'};//'\033[1G'};//'\f'};//, '[', '2', 'J', 0x27, '[', 'H'};
     uint32_t free_buff = huart2.hdmarx->Instance->CNDTR;
     uint32_t Head = 12 - free_buff;
     sprintf(cadena, "Content: %s \t\t Head: %d \t\t Restantes: %d \r\n", UART2_rxBuffer, Head, free_buff);
+	HAL_UART_Transmit(&huart2, clear_screen, sizeof(clear_screen), 100);
+	//printf("Sistema iniciado...\r\n");
+	HAL_UART_Transmit(&huart2, (uint8_t*) cadena, strlen(cadena),100);
+	HAL_UART_Transmit(&huart2, (uint8_t*) cadena, strlen(cadena),100);
+	HAL_UART_Transmit(&huart2, (uint8_t*) cadena, strlen(cadena),100);
 	HAL_UART_Transmit(&huart2, (uint8_t*) cadena, strlen(cadena),100);
     memset(UART2_rxBuffer, 0, 12);
     HAL_UART_DMAStop(&huart2);
@@ -194,7 +200,7 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 {
 	if(huart == &huart2)
 	{
-		char message[] = "Fallo en transmision de UART2";
+		char message[] = "Fallo en transmision de UART2 \r\n";
 		HAL_UART_Transmit(&huart2, (uint8_t *) message, sizeof(message), 100);
 	}
 
