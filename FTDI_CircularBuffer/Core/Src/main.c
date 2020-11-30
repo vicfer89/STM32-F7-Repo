@@ -36,7 +36,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define UART2_DMA_BUFFER_LEN 12
+#define UART2_DMA_BUFFER_LEN 256
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -118,7 +118,7 @@ int main(void)
 			  posOutBuffer = 0;
 		  }
 	  }
-	  HAL_Delay(500);
+	  //HAL_Delay(500);
     /* USER CODE END WHILE */
     /* USER CODE BEGIN 3 */
   }
