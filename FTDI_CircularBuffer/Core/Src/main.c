@@ -69,7 +69,7 @@ uint8_t UART2_rxBuffer[UART2_DMA_BUFFER_LEN] = {0};
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	int posOutBuffer = 0;
+	volatile uint32_t posOutBuffer = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -110,13 +110,8 @@ int main(void)
 	  uint32_t Head = UART2_DMA_BUFFER_LEN - huart2.hdmarx->Instance->CNDTR;
 	  while(Head != posOutBuffer)
 	  {
-		  //sprintf(cadena, "Content: %s \t\t Head: %lu \t\t Restantes: %lu \r\n", UART2_rxBuffer, Head, huart2.hdmarx->Instance->CNDTR);
-		  HAL_UART_Transmit(&huart2, &UART2_rxBuffer[posOutBuffer++], 1, 100);
-		  //posOutBuffer += strlen(cadena);
-		  if(posOutBuffer == UART2_DMA_BUFFER_LEN)
-		  {
-			  posOutBuffer = 0;
-		  }
+		  HAL_UART_Transmit_DMA(&huart2, &UART2_rxBuffer[posOutBuffer], 1);
+		  posOutBuffer = (posOutBuffer + 1) % UART2_DMA_BUFFER_LEN;
 	  }
 	  //HAL_Delay(500);
     /* USER CODE END WHILE */
