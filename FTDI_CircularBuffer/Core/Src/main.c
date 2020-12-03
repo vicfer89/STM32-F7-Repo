@@ -28,6 +28,7 @@
 /* USER CODE BEGIN Includes */
 #include <string.h>
 #include <stdio.h>
+#include "UartRingbuffer_multi.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -41,7 +42,8 @@ int __io_putchar(int ch);
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
+#define device_uart &huart1
+#define pc_uart &huart2
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -94,18 +96,28 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  printf("Sistema iniciado...\r\n");
-  char print[] = "Hola mundo \r\n";
-  HAL_UART_Transmit(&huart2, (uint8_t* )print, sizeof(print), 100);
+  //printf("Sistema iniciado...\r\n");
+  //char print[] = "Hola mundo \r\n";
+  //HAL_UART_Transmit(&huart2, (uint8_t* )print, sizeof(print), 100);
 
-  HAL_UART_Receive_DMA(&huart2, UART2_rxBuffer, 12);
+  //HAL_UART_Receive_DMA(&huart2, UART2_rxBuffer, 12);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	    if (IsDataAvailable(pc_uart))
+	    {
+	     int data = Uart_read(pc_uart);
+	     Uart_write(data, device_uart);
+	    }
 
+	    if (IsDataAvailable(device_uart))
+	    {
+	     int data = Uart_read(device_uart);
+	     Uart_write(data, pc_uart);
+	    }
     /* USER CODE END WHILE */
     /* USER CODE BEGIN 3 */
   }
@@ -176,23 +188,6 @@ int __io_putchar(int ch)
 	HAL_UART_Transmit_IT(&huart2, (uint8_t *) &ch, 1);
 	return 0;
 }
-
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-{
-
-}
-
-/*
-void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
-{
-	if(huart == &huart2)
-	{
-		char message[] = "Fallo en transmision de UART2";
-		HAL_UART_Transmit(&huart2, (uint8_t *) message, sizeof(message), 100);
-	}
-
-    HAL_UART_Receive_DMA(huart, UART2_rxBuffer, 12);
-}*/
 
 /* USER CODE END 4 */
 
