@@ -34,6 +34,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 int __io_putchar(int ch);
+int _write(int file, char *ptr, int len);
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -96,7 +97,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  //printf("Sistema iniciado...\r\n");
+  printf("Sistema iniciado...\r\n");
   //char print[] = "Hola mundo \r\n";
   //HAL_UART_Transmit(&huart2, (uint8_t* )print, sizeof(print), 100);
 
@@ -182,11 +183,11 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-int __io_putchar(int ch)
+int _write(int file, char *ptr, int len)
 {
 	while(HAL_UART_GetState(&huart2) == HAL_UART_STATE_BUSY_TX){}
-	HAL_UART_Transmit_IT(&huart2, (uint8_t *) &ch, 1);
-	return 0;
+	HAL_UART_Transmit_DMA(&huart2, (uint8_t *) ptr, len);
+	return len;
 }
 
 /* USER CODE END 4 */
