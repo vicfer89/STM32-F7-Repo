@@ -33,8 +33,8 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-int __io_putchar(int ch);
-int _write(int file, char *ptr, int len);
+//int __io_putchar(int ch);
+//int _write(int file, char *ptr, int len);
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -84,6 +84,7 @@ int main(void)
   /* USER CODE END Init */
 
   /* Configure the system clock */
+
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
@@ -97,11 +98,12 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  printf("Sistema iniciado...\r\n");
+  //printf("Sistema iniciado...\r\n");
   //char print[] = "Hola mundo \r\n";
   //HAL_UART_Transmit(&huart2, (uint8_t* )print, sizeof(print), 100);
 
   //HAL_UART_Receive_DMA(&huart2, UART2_rxBuffer, 12);
+  Ringbuf_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -111,14 +113,14 @@ int main(void)
 	    if (IsDataAvailable(pc_uart))
 	    {
 	     int data = Uart_read(pc_uart);
-	     Uart_write(data, device_uart);
-	    }
-
-	    if (IsDataAvailable(device_uart))
-	    {
-	     int data = Uart_read(device_uart);
 	     Uart_write(data, pc_uart);
 	    }
+
+	    /*if (IsDataAvailable(device_uart))
+	    {
+	     int data = Uart_read(device_uart);
+	     Uart_write(data, device_uart);
+	    }*/
     /* USER CODE END WHILE */
     /* USER CODE BEGIN 3 */
   }
@@ -183,12 +185,12 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-int _write(int file, char *ptr, int len)
+/*int _write(int file, char *ptr, int len)
 {
 	while(HAL_UART_GetState(&huart2) == HAL_UART_STATE_BUSY_TX){}
 	HAL_UART_Transmit_DMA(&huart2, (uint8_t *) ptr, len);
 	return len;
-}
+}*/
 
 /* USER CODE END 4 */
 

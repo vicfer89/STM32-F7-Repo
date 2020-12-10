@@ -41,17 +41,18 @@ void store_char (unsigned char c, ring_buffer *buffer);
 
 void Ringbuf_init(void)
 {
+
   _rx_buffer1 = &rx_buffer1;
   _tx_buffer1 = &tx_buffer1;
   _rx_buffer2 = &rx_buffer2;
   _tx_buffer2 = &tx_buffer2;
 
   /* Enable the UART Error Interrupt: (Frame error, noise error, overrun error) */
-  __HAL_UART_ENABLE_IT(device_uart, UART_IT_ERR);
+ // __HAL_UART_ENABLE_IT(device_uart, UART_IT_ERR);
   __HAL_UART_ENABLE_IT(pc_uart, UART_IT_ERR);
 
   /* Enable the UART Data Register not empty Interrupt */
-  __HAL_UART_ENABLE_IT(device_uart, UART_IT_RXNE);
+  //__HAL_UART_ENABLE_IT(device_uart, UART_IT_RXNE);
   __HAL_UART_ENABLE_IT(pc_uart, UART_IT_RXNE);
 }
 
@@ -272,7 +273,7 @@ int IsDataAvailable(UART_HandleTypeDef *uart)
 {
 	if (uart == device_uart) return (uint16_t)(UART_BUFFER_SIZE + _rx_buffer1->head - _rx_buffer1->tail) % UART_BUFFER_SIZE;
 	else if (uart == pc_uart) return (uint16_t)(UART_BUFFER_SIZE + _rx_buffer2->head - _rx_buffer2->tail) % UART_BUFFER_SIZE;
-	return -1;
+	return 0;
 }
 
 
