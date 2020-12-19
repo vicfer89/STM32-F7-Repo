@@ -113,14 +113,14 @@ int main(void)
 	    if (IsDataAvailable(pc_uart))
 	    {
 	     int data = Uart_read(pc_uart);
-	     Uart_write(data, pc_uart);
+	     Uart_write(data, device_uart);
 	    }
 
-	    /*if (IsDataAvailable(device_uart))
+	    if (IsDataAvailable(device_uart))
 	    {
 	     int data = Uart_read(device_uart);
-	     Uart_write(data, device_uart);
-	    }*/
+	     Uart_write(data, pc_uart);
+	    }
     /* USER CODE END WHILE */
     /* USER CODE BEGIN 3 */
   }

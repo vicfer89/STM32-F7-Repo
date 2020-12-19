@@ -48,11 +48,11 @@ void Ringbuf_init(void)
   _tx_buffer2 = &tx_buffer2;
 
   /* Enable the UART Error Interrupt: (Frame error, noise error, overrun error) */
- // __HAL_UART_ENABLE_IT(device_uart, UART_IT_ERR);
+  __HAL_UART_ENABLE_IT(device_uart, UART_IT_ERR);
   __HAL_UART_ENABLE_IT(pc_uart, UART_IT_ERR);
 
   /* Enable the UART Data Register not empty Interrupt */
-  //__HAL_UART_ENABLE_IT(device_uart, UART_IT_RXNE);
+  __HAL_UART_ENABLE_IT(device_uart, UART_IT_RXNE);
   __HAL_UART_ENABLE_IT(pc_uart, UART_IT_RXNE);
 }
 
