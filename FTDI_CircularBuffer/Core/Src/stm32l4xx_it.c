@@ -86,22 +86,19 @@ void NMI_Handler(void)
 /**
   * @brief This function handles Hard fault interrupt.
   */
-void HardFault_Handler(void)
+__attribute__ ((naked, noreturn)) void HardFault_Handler(void)
 {
-  /* USER CODE BEGIN HardFault_IRQn 0 */
-
-  /* USER CODE END HardFault_IRQn 0 */
+	static int i = 5;
   while (1)
   {
-    /* USER CODE BEGIN W1_HardFault_IRQn 0 */
-    /* USER CODE END W1_HardFault_IRQn 0 */
+	 i = i + 1;
   }
 }
 
 /**
   * @brief This function handles Memory management fault.
   */
-void MemManage_Handler(void)
+__attribute__ ((naked, noreturn)) void MemManage_Handler(void)
 {
   /* USER CODE BEGIN MemoryManagement_IRQn 0 */
 
@@ -116,7 +113,7 @@ void MemManage_Handler(void)
 /**
   * @brief This function handles Prefetch fault, memory access fault.
   */
-void BusFault_Handler(void)
+__attribute__ ((naked, noreturn)) void BusFault_Handler(void)
 {
   /* USER CODE BEGIN BusFault_IRQn 0 */
 
@@ -131,7 +128,7 @@ void BusFault_Handler(void)
 /**
   * @brief This function handles Undefined instruction or illegal state.
   */
-void UsageFault_Handler(void)
+__attribute__ ((naked, noreturn)) void UsageFault_Handler(void)
 {
   /* USER CODE BEGIN UsageFault_IRQn 0 */
 
