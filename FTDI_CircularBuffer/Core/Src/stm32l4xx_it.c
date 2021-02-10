@@ -33,7 +33,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define __stackless __attribute__ ((naked, noreturn, optimize("-O3")))
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -86,19 +86,20 @@ void NMI_Handler(void)
 /**
   * @brief This function handles Hard fault interrupt.
   */
-__attribute__ ((naked, noreturn)) void HardFault_Handler(void)
+__stackless void HardFault_Handler(void)
 {
-	static int i = 5;
+	// Sets LD3 pin to HIGH
+	LD3_GPIO_Port->BSRR = (uint32_t)LD3_Pin;
   while (1)
   {
-	 i = i + 1;
+
   }
 }
 
 /**
   * @brief This function handles Memory management fault.
   */
-__attribute__ ((naked, noreturn)) void MemManage_Handler(void)
+__stackless void MemManage_Handler(void)
 {
   /* USER CODE BEGIN MemoryManagement_IRQn 0 */
 
@@ -113,7 +114,7 @@ __attribute__ ((naked, noreturn)) void MemManage_Handler(void)
 /**
   * @brief This function handles Prefetch fault, memory access fault.
   */
-__attribute__ ((naked, noreturn)) void BusFault_Handler(void)
+__stackless void BusFault_Handler(void)
 {
   /* USER CODE BEGIN BusFault_IRQn 0 */
 
@@ -128,7 +129,7 @@ __attribute__ ((naked, noreturn)) void BusFault_Handler(void)
 /**
   * @brief This function handles Undefined instruction or illegal state.
   */
-__attribute__ ((naked, noreturn)) void UsageFault_Handler(void)
+__stackless void UsageFault_Handler(void)
 {
   /* USER CODE BEGIN UsageFault_IRQn 0 */
 

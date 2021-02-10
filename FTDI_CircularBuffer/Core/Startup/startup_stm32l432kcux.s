@@ -229,6 +229,9 @@ g_pfnVectors:
 	.word	FPU_IRQHandler
 	.word	CRS_IRQHandler
 
+	.ascii "Copyright (C) VFF - 2021"
+    .align 4
+
 
 /*******************************************************************************
 *
