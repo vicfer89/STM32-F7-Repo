@@ -71,7 +71,9 @@ uint8_t UART2_rxBuffer[12] = {0};
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	extern uint32_t _scpy_info_;
+	extern uint32_t _ecpy_info_;
+	uint32_t cpy_len = _ecpy_info_ - _scpy_info_;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/

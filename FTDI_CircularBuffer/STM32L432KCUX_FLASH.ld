@@ -50,7 +50,16 @@ SECTIONS
     KEEP(*(.isr_vector)) /* Startup code */
     . = ALIGN(4);
   } >FLASH
-
+  
+  /* Section for copyright information */
+  .cpy_info :
+  {
+    . = ALIGN(4);
+    _scpy_info_ = .;
+    KEEP(*(.cpy_info)) /* Startup code */
+    _ecpy_info_ = .;
+    . = ALIGN(4);
+  } >FLASH  
   /* The program code and other data into "FLASH" Rom type memory */
   .text :
   {

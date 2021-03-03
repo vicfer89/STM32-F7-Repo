@@ -229,8 +229,13 @@ g_pfnVectors:
 	.word	FPU_IRQHandler
 	.word	CRS_IRQHandler
 
-	.ascii "Copyright (C) VFF - 2021"
-    .align 4
+	.section	.cpy_info,"a",%progbits
+	.type	g_copyright, %object
+	.size	g_copyright, .-g_copyright
+g_copyright:
+	.ascii "Victor Fernandez Fernandez\n"
+	.ascii "Copyright (C) - 2021\n"
+	.ascii "Version v0.0 - 03/03/2021\n"
 
 
 /*******************************************************************************
